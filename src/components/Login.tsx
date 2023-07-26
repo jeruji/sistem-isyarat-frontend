@@ -27,7 +27,7 @@ const Login = () => {
   });
   const [currentVideo, setCurrentVideo] = useState<string>();
   const [indexVideo, setIndexVideo] = useState<number>(0);
-  const [videos, setVideos] = useState<ListVideoType[]>();
+  const [videos, setVideos] = useState<string[]>();
 
   useEffect(() => {
     console.log(userData);
@@ -142,17 +142,61 @@ const Login = () => {
   };
 
   const getSigns = (sentence: string) => {
-    retrieve.retrieveListVideo(sentence).then((response: ListVideoType[]) => {
-      setVideos(response);
-      setCurrentVideo(`${response[0].id}/${response[0].name}.mp4`);
-      setIndexVideo(0);
+    const words = sentence.split(" ");
+    let nextSentences: string[] = [];
+
+    words.forEach((word, indexWords) => {
+      if (word.includes("+")) {
+        const affixs = word.split("+");
+        affixs.forEach((affix, index) => {
+          if (index === 0) {
+            if (indexWords === 0) {
+              setCurrentVideo(
+                `imbuhan/Awalan-${
+                  affix.charAt(0).toUpperCase() + affix.slice(1)
+                }.webm`
+              );
+            }
+
+            nextSentences.push(
+              `imbuhan/Awalan-${
+                affix.charAt(0).toUpperCase() + affix.slice(1)
+              }.webm`
+            );
+          } else if (index == 1) {
+            nextSentences.push(
+              `katadasar/${affix.charAt(0).toUpperCase() + affix.slice(1)}.webm`
+            );
+          } else if (index === 2) {
+            nextSentences.push(
+              `imbuhan/Akhiran-${
+                affix.charAt(0).toUpperCase() + affix.slice(1)
+              }.webm`
+            );
+          }
+        });
+      } else {
+        if (indexWords === 0) {
+          setCurrentVideo(
+            `katadasar/${word.charAt(0).toUpperCase() + word.slice(1)}.webm`
+          );
+        }
+        nextSentences.push(
+          `katadasar/${word.charAt(0).toUpperCase() + word.slice(1)}.webm`
+        );
+      }
     });
+
+    setVideos(nextSentences);
+    setIndexVideo(0);
   };
 
   const setNextVideo = () => {
     if (indexVideo + 1 < videos.length) {
       setIndexVideo(indexVideo + 1);
-      setCurrentVideo(`${videos[indexVideo + 1].id}/${videos[indexVideo + 1].name}.mp4`);
+      setCurrentVideo(
+        `${videos[indexVideo + 1]}`
+      );
     } else {
       setCurrentVideo("");
     }

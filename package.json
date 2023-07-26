@@ -8,7 +8,7 @@
     "start": "webpack serve --mode development --open --hot",
     "build": "webpack --mode production",
     "upload-s3": "aws s3 sync dist/ s3://sibi",
-    "invalidate-cf-cache": "aws cloudfront create-invalidation --distribution-id E2KDSPQ6PNL8T9 --paths '/*'",
+    "invalidate-cf-cache": "aws cloudfront create-invalidation --distribution-id E2S21N8HD11MWP --paths '/*'",
     "deploy-s3": "npm run build && npm run upload-s3 && npm run invalidate-cf-cache"
   },
   "author": "",
