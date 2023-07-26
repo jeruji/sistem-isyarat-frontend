@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --mode development --open --hot",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "upload-s3": "aws s3 sync dist/ s3://sibi",
+    "invalidate-cf-cache": "aws cloudfront create-invalidation --distribution-id E2KDSPQ6PNL8T9 --paths '/*'",
+    "deploy-s3": "npm run build && npm run upload-s3 && npm run invalidate-cf-cache"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +27,7 @@
     "recoil": "^0.7.6",
     "sass": "^1.54.9",
     "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
     "style-loader": "^3.3.1",
     "uuid": "^9.0.0"
   },
@@ -33,10 +37,14 @@
     "@babel/plugin-transform-runtime": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
     "@babel/preset-react": "^7.18.6",
+    "@types/dotenv-webpack": "^7.0.3",
     "@types/node": "^18.7.14",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
+    "@types/sockjs-client": "^1.5.1",
+    "@types/stompjs": "^2.3.5",
     "babel-loader": "^8.2.5",
+    "dotenv-webpack": "^8.0.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "node-sass": "^7.0.3",
